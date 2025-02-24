@@ -4,130 +4,150 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Food Donate - Login</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,500;0,700;0,800;1,400;1,600&display=swap');
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-    /* Aesthetic Background */
-    body {
-        
-        background: linear-gradient(to bottom, rgba(240, 244, 248, 0.9), rgba(232, 245, 233, 0.9)),
-                    url('https://source.unsplash.com/1600x900/?food,donation') no-repeat center center fixed;
-        
-        background-size: cover;
-        color: #333;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        height: 100vh;
-        text-align: center;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    .logo {
-        padding-top: 20px;
-        font-size: 40px;
-        text-align: center;
-        font-weight: 700;
-    }
+        /* Background Styling */
+        body {
+            background: url('https://source.unsplash.com/1600x900/?food,donation') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
 
-    .logo b {
-        color: #06C167;
-    }
+        /* Glassmorphism Card */
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 320px;
+        }
 
-    .para {
-        text-align: center;
-        font-size: 24px;
-        margin: 10px 0 20px;
-    }
-
-    .log {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
-    }
-
-    a {
-        display: inline-block;
-        font-size: 18px;
-        background: #06C167;
-        padding: 12px 40px;
-        text-decoration: none;
-        font-weight: 600;
-        color: #fff;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    a:hover {
-        background-color: #04a356;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    a i {
-        margin-right: 8px;
-    }
-
-    .add {
-        margin-top: 20px;
-        text-align: center;
-    }
-
-    /* Responsive Design */
-    @media only screen and (max-width: 768px) {
         .logo {
-            font-size: 32px;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .logo b {
+            color: #06C167;
         }
 
         .para {
+            font-size: 20px;
+            margin: 10px 0 20px;
+        }
+
+        .log {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Stylish Buttons */
+        a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
             font-size: 18px;
+            background: #06C167;
+            padding: 12px 40px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #fff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        a {
-            font-size: 16px;
-            padding: 10px 30px;
-        }
-    }
-
-    @media only screen and (max-width: 480px) {
-        .logo {
-            font-size: 28px;
+        a:hover {
+            background-color: #04a356;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-        a {
-            font-size: 14px;
-            padding: 8px 20px;
+        a i {
+            margin-right: 8px;
         }
-    }
-</style>
+
+        /* Dark Mode Toggle */
+        .dark-mode {
+            background: rgba(30, 30, 30, 0.85);
+            color: #ddd;
+        }
+
+        .toggle-btn {
+            margin-top: 20px;
+            padding: 8px 15px;
+            background: transparent;
+            border: 2px solid white;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media only screen and (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 30px;
+            }
+
+            .logo {
+                font-size: 28px;
+            }
+
+            a {
+                font-size: 16px;
+                padding: 10px 30px;
+            }
+        }
+    </style>
+</head>
 <body>
-    <p class="logo"> Welcome to Food <b>Donate</b></p>
-    <p class="para"> Login as</p>
+    <div class="container">
+        <p class="logo"> Welcome to Food <b>Donate</b></p>
+        <p class="para"> Login as</p>
 
-    <div class="log">
-        <a href="signup.php"><i class="fa-solid fa-user"></i> User</a>
-        <a href="admin/signup.php"><i class="fa-solid fa-user-gear"></i> Admin</a>
-        <a href="delivery/deliverysignup.php" id="delivery"><i class="fa-solid fa-motorcycle"></i> Delivery</a>
+        <div class="log">
+            <a href="signup.php"><i class="fa-solid fa-user"></i> User</a>
+            <a href="admin/signup.php"><i class="fa-solid fa-user-gear"></i> Admin</a>
+            <a href="delivery/deliverysignup.php" id="delivery"><i class="fa-solid fa-motorcycle"></i> Delivery</a>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleMode()">🌙 Toggle Mode</button>
     </div>
 
-    <div class="add">
-        <!-- Optional Content Here -->
-    </div>
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+    </script>
 </body>
 </html>
