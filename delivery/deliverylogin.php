@@ -1,115 +1,94 @@
 <?php
 session_start();
-// $connection = mysqli_connect("localhost:3307", "root", "");
-// $db = mysqli_select_db($connection, 'demo');
 include '../connection.php'; 
-$msg=0;
+$msg = '';
+
 if (isset($_POST['sign'])) {
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-  $sanitized_emailid =  mysqli_real_escape_string($connection, $email);
-  $sanitized_password =  mysqli_real_escape_string($connection, $password);
-  // $hash=password_hash($password,PASSWORD_DEFAULT);
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-  $sql = "select * from delivery_persons where email='$sanitized_emailid'";
-  $result = mysqli_query($connection, $sql);
-  $num = mysqli_num_rows($result);
- 
-  if ($num == 1) {
-    while ($row = mysqli_fetch_assoc($result)) {
-      if (password_verify($sanitized_password, $row['password'])) {
-        $_SESSION['email'] = $email;
-        $_SESSION['name'] = $row['name'];
-        $_SESSION['Did']=$row['Did'];
-        $_SESSION['city']=$row['city'];
-        header("location:delivery.php");
-      } else {
-        $msg = 1;
-        // echo '<style type="text/css">
-        // {
-        //     .password input{
-                
-        //         border:.5px solid red;
-                
-                
-        //       }
+    // Prevent SQL injection
+    $sanitized_email = mysqli_real_escape_string($connection, $email);
+    $sanitized_password = mysqli_real_escape_string($connection, $password);
 
-        // }
-        // </style>';
-        // echo "<h1><center> Login Failed incorrect password</center></h1>";
-      }
+    // Fetch user from database
+    $sql = "SELECT * FROM delivery_persons WHERE email='$sanitized_email'";
+    $result = mysqli_query($connection, $sql);
+    $num = mysqli_num_rows($result);
+
+    if ($num == 1) {
+        $row = mysqli_fetch_assoc($result);
+        if (password_verify($sanitized_password, $row['password'])) {
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['name'] = $row['name'];
+            $_SESSION['Did'] = $row['Did'];
+            $_SESSION['city'] = $row['city'];
+            header("location: delivery.php");
+            exit();
+        } else {
+            $msg = "Incorrect password!";
+        }
+    } else {
+        $msg = "Account does not exist!";
     }
-  } else {
-    echo "<h1><center>Account does not exists </center></h1>";
-  }
-
-
-
-
-  // $query="select * from login where email='$email'and password='$password'";
-  // $qname="select name from login where email='$email'and password='$password'";
-
-
-  // if(mysqli_num_rows($query_run)==1)
-  // {
-  // //   $_SESSION['name']=$name;
-
-  //   // echo "<h1><center> Login Sucessful  </center></h1>". $name['gender'] ;
-
-  //   $_SESSION['email']=$email;
-  //   $_SESSION['name']=$name['name'];
-  //   $_SESSION['gender']=$name['gender'];
-  //   header("location:home.html");
-
-  // }
-  // else{
-  //   echo "<h1><center> Login Failed</center></h1>";
-  // }
 }
 ?>
 
-
-
 <!DOCTYPE html>
-
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Login Form</title>
-    <link rel="stylesheet" href="deliverycss.css">
-  </head>
-  <body>
-    <div class="center">
-      <h1>Delivery Login</h1>
-      <form method="post">
-        <div class="txt_field">
-          <input type="email" name="email" required/>
-          <span></span>
-          <label>Email</label>
+    <title>Delivery Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 p-4">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <div class="text-center">
+            <div class="mx-auto bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l2.09 6.26L20 9l-5 3.91L16.18 20 12 17l-4.18 3L9 12.91 4 9l5.91-.74L12 2z"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-green-800">Delivery Login</h1>
+            <p class="text-green-600">Join us in reducing food waste, one delivery at a time.</p>
         </div>
-        <div class="txt_field">
-          <input type="password" name="password" required/>
-          <span></span>
-          <label>Password</label>
-          
-        </div>
-        <?php
-        if($msg==1){
-                        // echo ' <i class="bx bx-error-circle error-icon"></i>';
-                        echo '<p class="error">Password not match.</p>';
-                    }
-                    ?>
-                    <br>
-        <!-- <div class="pass">Forgot Password?</div> -->
-        <input type="submit" value="Login" name="sign">
-        <div class="signup_link">
-          Not a member? <a href="deliverysignup.php">Signup</a>
-        </div>
-      </form>
-    </div>
 
-  </body>
+        <form method="post" class="mt-6 space-y-4">
+            <div class="relative">
+                <svg class="absolute left-3 top-3 h-5 w-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v2m0 4h.01m-6-6a8 8 0 1112 0"></path>
+                </svg>
+                <input type="email" name="email" placeholder="Enter your email" required
+                    class="w-full pl-10 p-2 border border-green-300 rounded-md focus:ring-green-500 focus:border-green-500">
+            </div>
+
+            <div class="relative">
+                <svg class="absolute left-3 top-3 h-5 w-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 17v.01"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 9a4 4 0 018 0v3a4 4 0 01-8 0V9z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 13h4"></path>
+                </svg>
+                <input type="password" name="password" placeholder="Enter your password" required
+                    class="w-full pl-10 p-2 border border-green-300 rounded-md focus:ring-green-500 focus:border-green-500">
+            </div>
+
+            <?php if ($msg): ?>
+                <p class="text-red-600 text-sm text-center"><?= $msg ?></p>
+            <?php endif; ?>
+
+            <button type="submit" name="sign" class="w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded-md">
+                Login
+            </button>
+
+            <div class="text-center mt-4">
+                <p class="text-sm text-green-600">
+                    Not a member? <a href="deliverysignup.php" class="font-semibold hover:text-green-700">Sign up</a>
+                </p>
+                
+            </div>
+        </form>
+    </div>
+</body>
 </html>
