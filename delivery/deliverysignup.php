@@ -1,129 +1,119 @@
 <?php
-// session_start();
-// $connection=mysqli_connect("localhost:3307","root","");
-// $db=mysqli_select_db($connection,'demo');
-include '../connection.php';
-$msg=0;
-if(isset($_POST['sign']))
-{
+session_start();
+include '../connection.php'; // Database connection
 
-    $username=$_POST['username'];
-    $email=$_POST['email'];
-    $password=$_POST['password'];
-    $location=$_POST['district'];
+$msg = "";
 
-    // $location=$_POST['district'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = mysqli_real_escape_string($connection, $_POST['username']);
+    $email = mysqli_real_escape_string($connection, $_POST['email']);
+    $password = mysqli_real_escape_string($connection, $_POST['password']);
+    $location = mysqli_real_escape_string($connection, $_POST['location']);
 
-    $pass=password_hash($password,PASSWORD_DEFAULT);
-    $sql="select * from delivery_persons where email='$email'" ;
-    $result= mysqli_query($connection, $sql);
-    $num=mysqli_num_rows($result);
-    if($num==1){
-        // echo "<h1> already account is created </h1>";
-        // echo '<script type="text/javascript">alert("already Account is created")</script>';
-        echo "<h1><center>Account already exists</center></h1>";
+    // Check if email already exists
+    $check_email = mysqli_query($connection, "SELECT * FROM users WHERE email='$email'");
+    if (mysqli_num_rows($check_email) > 0) {
+        $msg = "<p class='text-red-600 text-center'>Email already exists.</p>";
+    } else {
+        // Hash password before storing
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Insert user into the database
+        $query = "INSERT INTO users (username, email, password, location) VALUES ('$username', '$email', '$hashed_password', '$location')";
+        if (mysqli_query($connection, $query)) {
+            $_SESSION['success'] = "Registration successful! You can now log in.";
+            header("Location: deliverylogin.php"); // Redirect to login page
+            exit();
+        } else {
+            $msg = "<p class='text-red-600 text-center'>Error: Could not register user.</p>";
+        }
     }
-    else{
-    
-    $query="insert into delivery_persons(name,email,password,city) values('$username','$email','$pass','$location')";
-    $query_run= mysqli_query($connection, $query);
-    if($query_run)
-    {
-        // $_SESSION['email']=$email;
-        // $_SESSION['name']=$row['name'];
-        // $_SESSION['gender']=$row['gender'];
-       
-        header("location:delivery.php");
-        // echo "<h1><center>Account does not exists </center></h1>";
-        //  echo '<script type="text/javascript">alert("Account created successfully")</script>'; -->
-    }
-    else{
-        echo '<script type="text/javascript">alert("data not saved")</script>';
-        
-    }
-}
-
-
-   
 }
 ?>
 
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-
-
-  <head>
+<head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen grid place-items-center bg-gradient-to-br from-green-50 to-emerald-100 p-4">
+    <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
+        <div class="text-center">
+            <div class="mx-auto bg-green-100 w-16 h-16 rounded-full grid place-items-center">
+                <svg class="w-8 h-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 00-7.2 17.2c.3.3.8.3 1.1 0L12 16l6.1 3.2c.3.2.8.2 1.1 0A10 10 0 0012 2z" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-green-800 mt-2">Register</h2>
+            <p class="text-green-600">Join us in reducing food waste and creating a sustainable future</p>
+        </div>
 
-    <title>Animated Login Form | CodingNepal</title>
-    <link rel="stylesheet" href="deliverycss.css">
-  </head>
-  <body>
-    <div class="center">
-      <h1>Register</h1>
-      <form method="post" action=" ">
-        <div class="txt_field">
-          <input type="text" name="username" required/>
-          <span></span>
-          <label>Username</label>
-        </div>
-        <div class="txt_field">
-          <input type="password" name="password" required/>
-          <span></span>
-          <label>Password</label>
-        </div>
-        <div class="txt_field">
-            <input type="email" name="email" required/>
-            <span></span>
-            <label>Email</label>
-          </div>
-          <div class="">
-                           <!-- <label for="district">District:</label> -->
-                           <select id="district" name="district" style="padding:10px; padding-left: 20px;">
-                          <option value="chennai">Chennai</option>
-                          <!-- <option value="kancheepuram">Kancheepuram</option>
-                          <option value="thiruvallur">Thiruvallur</option>
-                          <option value="vellore">Vellore</option>
-                          <option value="tiruvannamalai">Tiruvannamalai</option>
-                          <option value="tiruvallur">Tiruvallur</option>
-                          <option value="tiruppur">Tiruppur</option> -->
-                          <option value="coimbatore">Coimbatore</option>
-                          <!-- <option value="erode">Erode</option>
-                          <option value="salem">Salem</option>
-                          <option value="namakkal">Namakkal</option>
-                          <option value="tiruchirappalli">Tiruchirappalli</option>
-                          <option value="thanjavur">Thanjavur</option>
-                          <option value="pudukkottai">Pudukkottai</option>
-                          <option value="karur">Karur</option>
-                          <option value="ariyalur">Ariyalur</option>
-                          <option value="perambalur">Perambalur</option> -->
-                          <option value="madurai" selected>Madurai</option>
-                          <!-- <option value="virudhunagar">Virudhunagar</option>
-                          <option value="dindigul">Dindigul</option>
-                          <option value="ramanathapuram">Ramanathapuram</option>
-                          <option value="sivaganga">Sivaganga</option>
-                          <option value="thoothukkudi">Thoothukkudi</option>
-                          <option value="tirunelveli">Tirunelveli</option>
-                          <option value="tiruppur">Tiruppur</option>
-                          <option value="tenkasi">Tenkasi</option>
-                          <option value="kanniyakumari">Kanniyakumari</option> -->
-                        </select> 
-                        
-          </div>
-          <br>
-        <!-- <div class="pass">Forgot Password?</div> -->
-        <input type="submit" name="sign" value="Register">
-        <div class="signup_link">
-          Alredy a member? <a href="deliverylogin.php">Sigin</a>
-        </div>
-      </form>
+        <!-- Show error messages -->
+        <?php if ($msg != "") echo $msg; ?>
+
+        <form action="" method="POST" class="space-y-4 mt-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" name="username" required placeholder="Enter your username"
+                       class="w-full mt-1 p-2 border rounded-lg focus:ring-green-500 focus:border-green-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" name="email" required placeholder="Enter your email"
+                       class="w-full mt-1 p-2 border rounded-lg focus:ring-green-500 focus:border-green-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="relative">
+                    <input type="password" name="password" id="password" required placeholder="Create a password"
+                           class="w-full mt-1 p-2 border rounded-lg focus:ring-green-500 focus:border-green-500">
+                    <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zm-11.578 0A9 9 0 0112 6.75a9 9 0 019.828 5.25 9 9 0 01-19.656 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Location</label>
+                <input type="text" name="location" required placeholder="Enter your city"
+                       class="w-full mt-1 p-2 border rounded-lg focus:ring-green-500 focus:border-green-500">
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg">
+                Register
+            </button>
+
+            <p class="text-center text-sm text-gray-600">
+                Already a member?
+                <a href="deliverylogin.php" class="text-green-600 hover:text-green-700 font-medium">Sign in</a>
+            </p>
+        </form>
     </div>
 
-  </body>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            const eyeIcon = document.getElementById("eyeIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
+                                     d="M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zm-11.578 0A9 9 0 0112 6.75a9 9 0 019.828 5.25 9 9 0 01-19.656 0z"/>`;
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
+                                     d="M4.5 12s1.5-3 7.5-3 7.5 3 7.5 3m-7.5 3s-1.5 3-7.5 3-7.5-3-7.5-3m3.75-3a3.75 3.75 0 107.5 0 3.75 3.75 0 00-7.5 0z"/>`;
+            }
+        }
+    </script>
+</body>
 </html>

@@ -34,12 +34,6 @@ if (isset($_POST['sign'])) {
     <title>Login - Food Donate</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<style>
-
-    @apply bg-gradient-to-r from-green-400 to-blue-500 min-h-screen flex items-center justify-center;
-
-
-</style>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 class="text-2xl font-bold text-center text-green-600">Food Donate</h2>
