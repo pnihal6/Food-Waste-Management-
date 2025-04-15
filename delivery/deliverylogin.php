@@ -12,17 +12,16 @@ if (isset($_POST['sign'])) {
     $sanitized_password = mysqli_real_escape_string($connection, $password);
 
     // Fetch user from database
-    $sql = "SELECT * FROM delivery_persons WHERE email='$sanitized_email'";
+    $sql = "SELECT * FROM users WHERE email='$sanitized_email'";
     $result = mysqli_query($connection, $sql);
     $num = mysqli_num_rows($result);
 
     if ($num == 1) {
         $row = mysqli_fetch_assoc($result);
-        if (password_verify($sanitized_password, $row['password'])) {
+        if ($sanitized_password == $row['password']) {  // Simple comparison (not recommended for production)
             $_SESSION['email'] = $row['email'];
-            $_SESSION['name'] = $row['name'];
-            $_SESSION['Did'] = $row['Did'];
-            $_SESSION['city'] = $row['city'];
+            $_SESSION['name'] = $row['username'];
+            $_SESSION['location'] = $row['location'];
             header("location: delivery.php");
             exit();
         } else {
@@ -86,7 +85,6 @@ if (isset($_POST['sign'])) {
                 <p class="text-sm text-green-600">
                     Not a member? <a href="deliverysignup.php" class="font-semibold hover:text-green-700">Sign up</a>
                 </p>
-                
             </div>
         </form>
     </div>

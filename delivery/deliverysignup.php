@@ -15,11 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_num_rows($check_email) > 0) {
         $msg = "<p class='text-red-600 text-center'>Email already exists.</p>";
     } else {
-        // Hash password before storing
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-        // Insert user into the database
-        $query = "INSERT INTO users (username, email, password, location) VALUES ('$username', '$email', '$hashed_password', '$location')";
+        // Insert user into the database (no hashing)
+        $query = "INSERT INTO users (username, email, password, location) VALUES ('$username', '$email', '$password', '$location')";
         if (mysqli_query($connection, $query)) {
             $_SESSION['success'] = "Registration successful! You can now log in.";
             header("Location: deliverylogin.php"); // Redirect to login page
@@ -69,17 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Password</label>
-                <div class="relative">
-                    <input type="password" name="password" id="password" required placeholder="Create a password"
-                           class="w-full mt-1 p-2 border rounded-lg focus:ring-green-500 focus:border-green-500">
-                    <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                             stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zm-11.578 0A9 9 0 0112 6.75a9 9 0 019.828 5.25 9 9 0 01-19.656 0z"/>
-                        </svg>
-                    </button>
-                </div>
+                <input type="password" name="password" required placeholder="Create a password"
+                       class="w-full mt-1 p-2 border rounded-lg focus:ring-green-500 focus:border-green-500">
             </div>
 
             <div>
@@ -98,22 +86,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </p>
         </form>
     </div>
-
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById("password");
-            const eyeIcon = document.getElementById("eyeIcon");
-
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
-                                     d="M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zm-11.578 0A9 9 0 0112 6.75a9 9 0 019.828 5.25 9 9 0 01-19.656 0z"/>`;
-            } else {
-                passwordInput.type = "password";
-                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
-                                     d="M4.5 12s1.5-3 7.5-3 7.5 3 7.5 3m-7.5 3s-1.5 3-7.5 3-7.5-3-7.5-3m3.75-3a3.75 3.75 0 107.5 0 3.75 3.75 0 00-7.5 0z"/>`;
-            }
-        }
-    </script>
 </body>
 </html>
